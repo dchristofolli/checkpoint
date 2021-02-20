@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 
 public class EmployeeMapper {
-    @Value("${employee.mail.domain}")
-    private static String domain;
+//    @Value("${employee.mail.domain}")
+    private static String domain = "ilia.com.br";
 
     private static final Logger log = LoggerFactory.getLogger(EmployeeMapper.class);
 
