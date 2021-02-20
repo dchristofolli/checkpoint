@@ -1,10 +1,9 @@
 package com.dchristofolli.checkpoint.domain.repository;
 
-import com.dchristofolli.checkpoint.domain.model.EmployeeEntity;
+import com.dchristofolli.checkpoint.domain.model.TimeRegistrationEntity;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EmployeeRepository extends MongoRepository<EmployeeEntity, String> {
-    boolean existsByCpf(String cpf);
+public interface TimeRegistrationRepository extends MongoRepository<TimeRegistrationEntity, String> {
 }

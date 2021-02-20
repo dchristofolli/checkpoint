@@ -1,9 +1,6 @@
 employee:
   mail:
     domain: ilia.com.br
-springdoc:
-  swagger-ui:
-    path: /checkpoint-ui
 spring:
   data:
     mongodb:
