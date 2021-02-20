@@ -1,6 +1,7 @@
 package com.dchristofolli.checkpoint.v1.controller;
 
 import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationRequestDto;
+import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationResponseDto;
 import com.dchristofolli.checkpoint.v1.service.TimeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class TimeController {
 
     @PostMapping(value = "registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public void timeRegistration(@RequestBody TimeRegistrationRequestDto dto) {
-        timeService.timeRegistration(dto);
+    public TimeRegistrationResponseDto timeRegistration(@RequestBody TimeRegistrationRequestDto dto) {
+        return timeService.timeRegistration(dto);
     }
 }
