@@ -1,17 +1,18 @@
 package com.dchristofolli.checkpoint.domain.model;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 @Document(collection = "Time Registration")
 public class TimeRegistrationEntity {
     @Id
     private String id;
     private String employeeCpf;
-    private String time;
+    private LocalDateTime time;
 
-    public TimeRegistrationEntity(String id, String employeeCpf, String time) {
-        this.id = id;
+    public TimeRegistrationEntity(String employeeCpf, LocalDateTime time) {
         this.employeeCpf = employeeCpf;
         this.time = time;
     }
@@ -41,11 +42,11 @@ public class TimeRegistrationEntity {
         this.employeeCpf = employeeCpf;
     }
 
-    public String getTime() {
+    public LocalDateTime getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(LocalDateTime time) {
         this.time = time;
     }
 }

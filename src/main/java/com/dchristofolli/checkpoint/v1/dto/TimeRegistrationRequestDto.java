@@ -1,12 +1,18 @@
 package com.dchristofolli.checkpoint.v1.dto;
 
-import org.joda.time.DateTime;
+import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotBlank;
 
 public class TimeRegistrationRequestDto {
+    @CPF(message = "Invalid CPF. Type only numbers")
+    @NotBlank
     private String employeeCpf;
-    private DateTime time;
+    @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
+    private String time;
 
-    public TimeRegistrationRequestDto(String employeeCpf, DateTime time) {
+    public TimeRegistrationRequestDto(String employeeCpf, String time) {
         this.employeeCpf = employeeCpf;
         this.time = time;
     }
@@ -27,11 +33,11 @@ public class TimeRegistrationRequestDto {
         this.employeeCpf = employeeCpf;
     }
 
-    public DateTime getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(DateTime time) {
+    public void setTime(String time) {
         this.time = time;
     }
 }

@@ -1,6 +1,3 @@
-employee:
-  mail:
-    domain: ilia.com.br
 spring:
   data:
     mongodb:
