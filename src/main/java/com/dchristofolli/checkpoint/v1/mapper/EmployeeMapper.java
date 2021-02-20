@@ -20,7 +20,8 @@ public class EmployeeMapper {
     public static EmployeeEntity mapEmployeeToEntity(EmployeeRequestDto dto) {
         EmployeeEntity employeeEntity = EmployeeEntityBuilder.anEmployeeEntity()
             .withCpf(dto.getCpf())
-            .withEmailAddress(dto.getName() + "." + dto.getLastName() + "@" + domain)
+            .withEmailAddress(dto.getName().toLowerCase() + "." +
+                dto.getLastName().toLowerCase() + "@" + domain)
             .withName(dto.getName())
             .withLastName(dto.getLastName())
             .build();
