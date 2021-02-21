@@ -4,8 +4,8 @@ import com.dchristofolli.checkpoint.domain.model.TimeRegistrationEntity;
 import com.dchristofolli.checkpoint.domain.repository.TimeRegistrationRepository;
 import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationRequestDto;
 import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationResponseDto;
-import com.dchristofolli.checkpoint.v1.mapper.TimeRegistrationMapper;
-import org.joda.time.LocalDateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
@@ -25,15 +25,19 @@ public class TimeService {
 
     public TimeRegistrationResponseDto timeRegistration(TimeRegistrationRequestDto dto) {
         TimeRegistrationEntity entity;
-        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
+        DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd-MM-yyyy");
         if (dto.getTime() == null) {
-            LocalDateTime now = LocalDateTime.now().minusHours(3);
-            entity = new TimeRegistrationEntity(dto.getEmployeeCpf(), now);
-        }
-        else
-            entity = new TimeRegistrationEntity(dto.getEmployeeCpf(),
-                LocalDateTime.parse(dto.getTime(), formatter).minusHours(3));
-        log.info(dto.getDayPeriodEnum().toString());
+            LocalDate today = LocalDate.now();
+            LocalTime nowTime = LocalTime.now();
+            entity = new TimeRegistrationEntity(
+                dto.getEmployeeCpf(),
+                today.toString(),
+                nowTime.toString());
+        } else
+            entity = new TimeRegistrationEntity(
+                dto.getEmployeeCpf(),
+                LocalDate.parse(dto.getDate(), dateFormat).toString(),
+                LocalTime.parse(dto.getTime()).toString());
         return mapToResponse(timeRegistrationRepository.save(entity));
     }
 }

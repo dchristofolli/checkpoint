@@ -9,7 +9,7 @@ public class TimeRegistrationMapper {
 
     public static TimeRegistrationResponseDto mapToResponse(TimeRegistrationEntity entity) {
         return new TimeRegistrationResponseDto(
-            entity.getEmployeeCpf(),
-            entity.getTime().toLocalDate() + " " + entity.getTime().plusHours(3).toLocalTime());
+            entity.getEmployeeCpf(), entity.getDate(),
+            entity.getTime().substring(0, 5));
     }
 }

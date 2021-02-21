@@ -1,6 +1,5 @@
 package com.dchristofolli.checkpoint.v1.dto;
 
-import com.dchristofolli.checkpoint.domain.enumerator.ScheduleTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,32 +11,28 @@ public class TimeRegistrationRequestDto {
     @NotBlank
     @Schema(defaultValue = "07683807079")
     private String employeeCpf;
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
-    @Schema(defaultValue = "20-02-2021 13:17")
-    private String time;
-    @Schema(allowableValues = "AM_IN, AM_OUT, PM_IN, PM_OUT", defaultValue = "AM_IN")
-    private ScheduleTypeEnum scheduleTypeEnum;
 
-    public TimeRegistrationRequestDto(String employeeCpf, String time, ScheduleTypeEnum scheduleTypeEnum) {
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Schema(defaultValue = "20-02-2021")
+    private String date;
+
+    @DateTimeFormat(pattern = "HH:mm")
+    @Schema(defaultValue = "13:17")
+    private String time;
+
+    public TimeRegistrationRequestDto(@CPF(message = "Invalid CPF. Type only numbers") @NotBlank String employeeCpf, String date, String time) {
         this.employeeCpf = employeeCpf;
+        this.date = date;
         this.time = time;
-        this.scheduleTypeEnum = scheduleTypeEnum;
     }
 
     @Override
     public String toString() {
         return "TimeRegistrationRequestDto{" +
             "employeeCpf='" + employeeCpf + '\'' +
-            ", time=" + time +
+            ", date='" + date + '\'' +
+            ", time='" + time + '\'' +
             '}';
-    }
-
-    public ScheduleTypeEnum getDayPeriodEnum() {
-        return scheduleTypeEnum;
-    }
-
-    public void setDayPeriodEnum(ScheduleTypeEnum dayPeriodEnum) {
-        this.scheduleTypeEnum = dayPeriodEnum;
     }
 
     public String getEmployeeCpf() {
@@ -46,6 +41,14 @@ public class TimeRegistrationRequestDto {
 
     public void setEmployeeCpf(String employeeCpf) {
         this.employeeCpf = employeeCpf;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getTime() {
