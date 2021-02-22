@@ -3,6 +3,7 @@ package com.dchristofolli.checkpoint.v1.service;
 import com.dchristofolli.checkpoint.domain.model.TimeRegistrationEntity;
 import com.dchristofolli.checkpoint.domain.repository.TimeRegistrationRepository;
 import com.dchristofolli.checkpoint.exception.ApiException;
+import com.dchristofolli.checkpoint.v1.dto.ProjectAllocationRequestDto;
 import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationRequestDto;
 import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationResponseDto;
 import org.joda.time.LocalDate;
@@ -85,5 +86,16 @@ public class TimeService {
         String weekday = LocalDate.parse(dto.getDate(), dateFormat).dayOfWeek().getAsText();
         if (weekday.equals("Saturday") || weekday.equals("Sunday"))
             throw new ApiException("You can't work at weekends. Have fun :)", HttpStatus.BAD_REQUEST);
+    }
+
+    public void hoursWorkedInTheDay(ProjectAllocationRequestDto dto) {
+        //todo
+        List<LocalTime> timeList = timeRegistrationRepository
+            .findAllByEmployeeCpfAndAndDate(
+                dto.getEmployeeCpf(),
+                LocalDate.parse(dto.getDate(), dateFormat).toString())
+            .parallelStream()
+            .map(entity -> LocalTime.parse(entity.getTime()))
+            .collect(Collectors.toList());
     }
 }
