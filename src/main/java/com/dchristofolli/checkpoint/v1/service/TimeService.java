@@ -5,13 +5,10 @@ import com.dchristofolli.checkpoint.domain.repository.TimeRegistrationRepository
 import com.dchristofolli.checkpoint.exception.ApiException;
 import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationRequestDto;
 import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationResponseDto;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +22,6 @@ import static com.dchristofolli.checkpoint.v1.mapper.TimeRegistrationMapper.mapT
 public class TimeService {
     private final TimeRegistrationRepository timeRegistrationRepository;
     private static final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd-MM-yyyy");
-    private final Logger log = LoggerFactory.getLogger("Time Service");
 
     public TimeService(TimeRegistrationRepository timeRegistrationRepository) {
         this.timeRegistrationRepository = timeRegistrationRepository;
