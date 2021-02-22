@@ -29,6 +29,7 @@ public class TimeService {
     }
 
     public TimeRegistrationResponseDto timeRegistration(TimeRegistrationRequestDto dto) {
+        recordTypeSetter(dto);
         weekDayValidator(dto);
         TimeRegistrationEntity entity;
         intervalLessThanAnHour(dto);
@@ -40,6 +41,10 @@ public class TimeService {
                 LocalDate.parse(dto.getDate(), dateFormat).toString(),
                 LocalTime.parse(dto.getTime()).toString());
         return mapToResponse(timeRegistrationRepository.save(entity));
+    }
+
+    private int recordTypeSetter(TimeRegistrationRequestDto dto) {
+        return getAllRegistriesByEmployeeAndDate(dto).size();
     }
 
     private TimeRegistrationEntity actualDateTimeRegistration(TimeRegistrationRequestDto dto) {
