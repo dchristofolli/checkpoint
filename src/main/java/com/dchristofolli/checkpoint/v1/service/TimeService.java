@@ -4,21 +4,17 @@ import com.dchristofolli.checkpoint.domain.model.RecordType;
 import com.dchristofolli.checkpoint.domain.model.TimeRegistrationEntity;
 import com.dchristofolli.checkpoint.domain.repository.TimeRegistrationRepository;
 import com.dchristofolli.checkpoint.exception.ApiException;
-import com.dchristofolli.checkpoint.v1.dto.ProjectAllocationRequestDto;
 import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationRequestDto;
 import com.dchristofolli.checkpoint.v1.dto.TimeRegistrationResponseDto;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.DateTimeException;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static com.dchristofolli.checkpoint.v1.mapper.TimeRegistrationMapper.mapToResponse;
@@ -28,14 +24,11 @@ public class TimeService {
     private final TimeRegistrationRepository timeRegistrationRepository;
     private static final DateTimeFormatter dateFormat = DateTimeFormat.forPattern("dd-MM-yyyy");
 
-    private static final Logger log = LoggerFactory.getLogger("Time");
-
     public TimeService(TimeRegistrationRepository timeRegistrationRepository) {
         this.timeRegistrationRepository = timeRegistrationRepository;
     }
 
     public TimeRegistrationResponseDto timeRegistration(TimeRegistrationRequestDto dto) {
-        hoursWorkedInTheDay();
         recordTypeVerifier(dto);
         weekDayValidator(dto);
         TimeRegistrationEntity entity;
@@ -109,27 +102,5 @@ public class TimeService {
         String weekday = LocalDate.parse(dto.getDate(), dateFormat).dayOfWeek().getAsText();
         if (weekday.equals("Saturday") || weekday.equals("Sunday"))
             throw new ApiException("You can't work at weekends. Have fun :)", HttpStatus.BAD_REQUEST);
-    }
-
-    public Integer hoursWorkedInTheDay() {
-        AtomicReference<LocalTime> amIn = new AtomicReference<>();
-        AtomicReference<LocalTime> amOut = new AtomicReference<>();
-        AtomicReference<LocalTime> pmIn = new AtomicReference<>();
-        AtomicReference<LocalTime> pmOut = new AtomicReference<>();
-        timeRegistrationRepository.findAllByEmployeeCpfAndAndDate("07683807079", "22-02-2021")
-            .forEach(entity -> {
-                if (entity.getRecordType() == RecordType.AM_IN)
-                    amIn.set(dateFormat.parseLocalTime(entity.getTime()));
-                if (entity.getRecordType() == RecordType.AM_OUT)
-                    amOut.set(dateFormat.parseLocalTime(entity.getTime()));
-                if (entity.getRecordType() == RecordType.PM_IN)
-                    pmIn.set(dateFormat.parseLocalTime(entity.getTime()));
-                if (entity.getRecordType() == RecordType.PM_OUT)
-                    pmOut.set(dateFormat.parseLocalTime(entity.getTime()));
-            });
-        log.info("Horas do dia: " + amOut.get().plusMinutes(pmOut.get().getMinuteOfHour())
-            .minusMinutes(pmOut.get().getMinuteOfHour()).minusMinutes(pmIn.get().getMinuteOfHour()).getMinuteOfHour());
-        return amOut.get().plusMinutes(pmOut.get().getMinuteOfHour())
-            .minusMinutes(pmOut.get().getMinuteOfHour()).minusMinutes(pmIn.get().getMinuteOfHour()).getMinuteOfHour();
     }
 }
