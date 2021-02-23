@@ -9,11 +9,13 @@ public class TimeRegistrationEntity {
     @Id
     private String id;
     private String employeeCpf;
+    private RecordType recordType;
     private String date;
     private String time;
 
-    public TimeRegistrationEntity(String employeeCpf, String date, String time) {
+    public TimeRegistrationEntity(String employeeCpf, RecordType recordType, String date, String time) {
         this.employeeCpf = employeeCpf;
+        this.recordType = recordType;
         this.date = date;
         this.time = time;
     }
@@ -24,8 +26,17 @@ public class TimeRegistrationEntity {
             "id='" + id + '\'' +
             ", employeeCpf='" + employeeCpf + '\'' +
             ", date=" + date +
+            ", recordType=" + recordType + '\'' +
             ", time=" + time +
             '}';
+    }
+
+    public RecordType getRecordType() {
+        return recordType;
+    }
+
+    public void setRecordType(RecordType recordType) {
+        this.recordType = recordType;
     }
 
     public String getId() {

@@ -13,7 +13,7 @@ public class AllocationService {
     private TimeService timeService;
 
     public void allocateHour(ProjectAllocationRequestDto dto) {
-        timeService.hoursWorkedInTheDay(dto);
+        timeService.hoursWorkedInTheDay();
         allocationRepository.save(mapToEntity(dto));
     }
 }
