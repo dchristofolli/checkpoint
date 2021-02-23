@@ -44,7 +44,7 @@ public class TimeService {
         return mapToResponse(timeRegistrationRepository.save(entity));
     }
 
-    private RecordType recordTypeVerifier(TimeRegistrationRequestDto dto) {
+    public RecordType recordTypeVerifier(TimeRegistrationRequestDto dto) {
         if (getAllRegistriesByEmployeeAndDate(dto).isEmpty())
             return RecordType.AM_IN;
         if (getAllRegistriesByEmployeeAndDate(dto).size() == 1)
@@ -57,7 +57,7 @@ public class TimeService {
             throw new ApiException("You can no longer create records today", HttpStatus.BAD_REQUEST);
     }
 
-    private TimeRegistrationEntity actualDateTimeRegistration(TimeRegistrationRequestDto dto) {
+    public TimeRegistrationEntity actualDateTimeRegistration(TimeRegistrationRequestDto dto) {
         getLastRecordByEmployeeAndDate(dto);
         TimeRegistrationEntity entity;
         LocalDate today = LocalDate.now();
@@ -70,7 +70,7 @@ public class TimeService {
         return entity;
     }
 
-    private void intervalLessThanAnHour(TimeRegistrationRequestDto dto) {
+    public void intervalLessThanAnHour(TimeRegistrationRequestDto dto) {
         LocalTime lastRecord = getLastRecordByEmployeeAndDate(dto);
         boolean isBefore = getAllRegistriesByEmployeeAndDate(dto)
             .parallelStream()
@@ -81,14 +81,14 @@ public class TimeService {
                 ". Please, insert a time after " + lastRecord.plusHours(1).toString().substring(0, 5));
     }
 
-    private LocalTime getLastRecordByEmployeeAndDate(TimeRegistrationRequestDto dto) {
+    public LocalTime getLastRecordByEmployeeAndDate(TimeRegistrationRequestDto dto) {
         return getAllRegistriesByEmployeeAndDate(dto)
             .parallelStream()
             .max(LocalTime::compareTo)
             .orElseGet(() -> LocalTime.now().minusHours(8));
     }
 
-    private List<LocalTime> getAllRegistriesByEmployeeAndDate(TimeRegistrationRequestDto dto) {
+    public List<LocalTime> getAllRegistriesByEmployeeAndDate(TimeRegistrationRequestDto dto) {
         return timeRegistrationRepository
             .findAllByEmployeeCpfAndAndDate(
                 dto.getEmployeeCpf(),
@@ -98,7 +98,7 @@ public class TimeService {
             .collect(Collectors.toList());
     }
 
-    private void weekDayValidator(TimeRegistrationRequestDto dto) {
+    public void weekDayValidator(TimeRegistrationRequestDto dto) {
         String weekday = LocalDate.parse(dto.getDate(), dateFormat).dayOfWeek().getAsText();
         if (weekday.equals("Saturday") || weekday.equals("Sunday"))
             throw new ApiException("You can't work at weekends. Have fun :)", HttpStatus.BAD_REQUEST);
